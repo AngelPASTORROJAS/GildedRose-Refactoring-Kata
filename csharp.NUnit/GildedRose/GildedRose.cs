@@ -15,63 +15,63 @@ public class GildedRose
     {
         foreach (Item item in Items)
         {
-            if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
+            if ((IsNameAgeBrie(item) || IsNameBackstage(item)) && IsQualityLessOn50(item))
             {
-                if (item.Quality < 50)
-                {
-                    item.Quality++;
-
-                    if ((item.Name == "Backstage passes to a TAFKAL80ETC concert") && (item.Quality < 50))
-                    {
-                        if (item.SellIn < 11)
-                        {
-                            item.Quality++;
-                        }
-
-                        if (item.SellIn < 6)
-                        {
-                            item.Quality++;
-                        }
-                    }
-                }
+                item.Quality++;
             }
-            else
+            if ((IsNameAgeBrie(item) || IsNameBackstage(item)) && IsQualityLessOn50(item) && IsNameBackstage(item) && IsQualityLessOn50(item) && item.SellIn < 11)
             {
-                if ((item.Quality > 0) && (item.Name != "Sulfuras, Hand of Ragnaros"))
-                {
-                    item.Quality--;
-                }
+                item.Quality++;
             }
-
-            if (item.Name != "Sulfuras, Hand of Ragnaros")
+            if ((IsNameAgeBrie(item) || IsNameBackstage(item)) && IsQualityLessOn50(item) && IsNameBackstage(item) && IsQualityLessOn50(item) && item.SellIn < 6)
+            {
+                item.Quality++;
+            }
+            if (IsNameNotSulfuras(item))
             {
                 item.SellIn--;
             }
-
-            if (item.SellIn < 0)
+            if (IsNameNotSulfuras(item) && !(IsNameAgeBrie(item) || IsNameBackstage(item)) && item.Quality > 0)
             {
-                if (item.Name == "Aged Brie")
-                {
-                    if (item.Quality < 50)
-                    {
-                        item.Quality++;
-                    }
-                }
-                else
-                {
-                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-                    {
-                        item.Quality -= item.Quality;
-                    }
-                    else
-                    {
-                        if ((item.Quality > 0) && (item.Name != "Sulfuras, Hand of Ragnaros"))
-                        {
-                            item.Quality--;
-                        }
-                    }
-                }
+                item.Quality--;
+            }
+            if (IsSellInNegative(item) && IsNameAgeBrie(item) && IsQualityLessOn50(item))
+            {
+                item.Quality++;
+            }
+            if (IsSellInNegative(item) && !IsNameAgeBrie(item) && IsNameBackstage(item))
+            {
+                item.Quality = 0;
+            }
+            if (IsSellInNegative(item) && !IsNameAgeBrie(item) && !IsNameBackstage(item) && (item.Quality > 0) && IsNameNotSulfuras(item))
+            {
+                item.Quality--;
             }
         }
+    }
+
+    private static bool IsSellInNegative(Item item)
+    {
+        return item.SellIn < 0;
+    }
+
+    private static bool IsNameNotSulfuras(Item item)
+    {
+        return item.Name != "Sulfuras, Hand of Ragnaros";
+    }
+
+    private static bool IsQualityLessOn50(Item item)
+    {
+        return item.Quality < 50;
+    }
+
+    private static bool IsNameBackstage(Item item)
+    {
+        return item.Name == "Backstage passes to a TAFKAL80ETC concert";
+    }
+
+    private static bool IsNameAgeBrie(Item item)
+    {
+        return item.Name == "Aged Brie";
     }
 }
