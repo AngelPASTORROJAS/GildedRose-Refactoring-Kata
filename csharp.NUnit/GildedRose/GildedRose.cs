@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace GildedRoseKata;
 
@@ -16,38 +15,56 @@ public class GildedRose
     {
         foreach (Item item in Items)
         {
-            if ((item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert") && item.Quality < 50)
+            if ((isAgedBrie(item) || isPasses(item)) && item.Quality < 50)
             {
                 item.Quality++;
             }
-            if ((item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert") && item.Quality < 50 && item.Name == "Backstage passes to a TAFKAL80ETC concert" && item.Quality < 50 && item.SellIn < 11)
+            if (item.Quality < 50 && isPasses(item) && item.SellIn < 11)
             {
                 item.Quality++;
+                if (item.Quality < 50 && item.SellIn < 6)
+                {
+                    item.Quality++;
+                }
             }
-            if ((item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert") && item.Quality < 50 && item.Name == "Backstage passes to a TAFKAL80ETC concert" && item.Quality < 50 && item.SellIn < 6)
-            {
-                item.Quality++;
-            }
-            if (item.Name != "Sulfuras, Hand of Ragnaros")
+            if (isNotSulfuras(item))
             {
                 item.SellIn--;
+                if (!(isAgedBrie(item) || isPasses(item)) && item.Quality > 0)
+                {
+                    item.Quality--;
+                }
+                if (item.SellIn < 0)
+                {
+                    if (isAgedBrie(item) && item.Quality < 50)
+                    {
+                        item.Quality++;
+                    }
+                    if (isPasses(item))
+                    {
+                        item.Quality = 0;
+                    }
+                    if (!(isAgedBrie(item)) && !(isPasses(item)) && item.Quality > 0)
+                    {
+                        item.Quality--;
+                    }
+                }
             }
-            if (item.Name != "Sulfuras, Hand of Ragnaros" && !(item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert") && item.Quality > 0)
-            {
-                item.Quality--;
-            }
-            if (item.SellIn < 0 && item.Name == "Aged Brie" && item.Quality < 50)
-            {
-                item.Quality++;
-            }
-            if (item.SellIn < 0 && !(item.Name == "Aged Brie") && item.Name == "Backstage passes to a TAFKAL80ETC concert")
-            {
-                item.Quality = 0;
-            }
-            if (item.SellIn < 0 && !(item.Name == "Aged Brie") && !(item.Name == "Backstage passes to a TAFKAL80ETC concert") && (item.Quality > 0) && item.Name != "Sulfuras, Hand of Ragnaros")
-            {
-                item.Quality--;
-            }
+        }
+
+        static bool isAgedBrie(Item item)
+        {
+            return item.Name == "Aged Brie";
+        }
+
+        static bool isPasses(Item item)
+        {
+            return item.Name == "Backstage passes to a TAFKAL80ETC concert";
+        }
+
+        static bool isNotSulfuras(Item item)
+        {
+            return item.Name != "Sulfuras, Hand of Ragnaros";
         }
     }
 }
