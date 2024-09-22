@@ -26,7 +26,7 @@ public class GildedRose
                 case "Sulfuras, Hand of Ragnaros":
                     break;
                 default:
-                    UpdateQualityOthersName(item);
+                    ReduceQualityNormalItem(item);
                     break;
             }
         }
@@ -50,7 +50,7 @@ public class GildedRose
         }
     }
 
-    private static void UpdateQualityOthersName(Item item)
+    private static void ReduceQualityNormalItem(Item item)
     {
         item.SellIn--;
         ReduceQualityPositive(item);
@@ -73,10 +73,10 @@ public class GildedRose
     private static void UpdateQualityBackstage(Item item)
     {
         UpgradeQualityLowAged(item);
-        if (item.SellIn < 11)
+        if (item.SellIn <= 10)
         {
             UpgradeQualityLowAged(item);
-            if (item.SellIn < 6)
+            if (item.SellIn <= 5)
             {
                 UpgradeQualityLowAged(item);
             }
